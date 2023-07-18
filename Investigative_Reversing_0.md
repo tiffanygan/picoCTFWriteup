@@ -1,4 +1,4 @@
-# Investigative Reversing 0
+# [Investigative Reversing 0](https://play.picoctf.org/practice/challenge/70?page=1&search=inv)
 
 ## Running binary
 After downloading the [binary file](https://jupiter.challenges.picoctf.org/static/70fd416f817ab1e59beaf19dc2b586cd/mystery) and [image](https://jupiter.challenges.picoctf.org/static/70fd416f817ab1e59beaf19dc2b586cd/mystery.png), the first thing I tried was running the binary file `mystery`. In order to do that, we first need to make the file runnable, so `chmod a+x mystery`. Now that it's converted, we can run it. However, the output is

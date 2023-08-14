@@ -38,6 +38,8 @@ Portfolio as of Sat Aug 12 17:52:12 UTC 2023
 You don't own any stonks!
 Goodbye!
 ```
+
+From this brief example, we can guess that the option `1) Buy some stonks!` is going to be important in retrieving the flag. In contrast, `2) View my portfolio` does not appear to be useful. Notably, when we opt to buy stonks, the program prompts us for an API token, so this token will most likely have something to do with our flag. 
 ## Analyzing the C script
 Upon opening `vuln.c`, there's a lot of code, so let's take a look at bits of the most important function, `buy_stonks`:
 
@@ -80,7 +82,7 @@ int buy_stonks(Portfolio *p) {
 }
 ```
 
-The program's direct usage of `printf(user_buf);` makes it vulnerable to string format attacks. Exploiting this, I input `%p`, which is a format specifier that reveals memory addresses, in order to have the program return the value saved in the memory stack.
+The program's direct usage of `printf(user_buf);` makes it vulnerable to string format attacks. By inputting `%p`, intented to display the hex address of the subsequent data as a pointer, we can exploit this absence of data. This causes the `printf('%p)` function to pull and display content from the memory stack. The details of format string exploition can be found [here](https://owasp.org/www-community/attacks/Format_string_attack).
 
 ```
 tiffanygan-picoctf@webshell:/tmp$ nc mercury.picoctf.net 59616
@@ -99,6 +101,6 @@ Portfolio as of Sat Aug 12 18:02:52 UTC 2023
 Goodbye!
 ```
 
-In this case, `0x87453f0` is the value saved in memory. By chaining `%p`s, we can delve deeper into the memory. Once we have the memory content, we can decode it to get our flag.
+In this case, `0x87453f0` is the value saved in memory. By chaining `%p`s, we can delve deeper into the memory. Once we have the memory content, we can decode it to get our flag. While decoding, keep in mind that not everything in the stack will be the flag, so some gibberish is to be expected. In addition, if reading the stack with one endian does not give expected results, it may be helpful to try reading it with a different endian.
 
 The code is [here](https://github.com/tiffanygan/picoCTFWriteup/blob/main/src/main/python/stonks.py).

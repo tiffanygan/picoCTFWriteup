@@ -3,18 +3,20 @@ import requests
 
 def get_ps_and_qs(coprimes):
     ps_and_qs = []
-    get_ps_and_qs_helper(ps_and_qs, coprimes, 0, 1, 1)
+    ps = []
+    get_ps_and_qs_helper(ps, coprimes, 0, 1)
+    for p in ps:
+        ps_and_qs.append((p, n // p))
     return ps_and_qs
 
 
-def get_ps_and_qs_helper(ps_and_qs, coprimes, idx, curr_factor_one, curr_factor_two):
+def get_ps_and_qs_helper(ps, coprimes, idx, curr_factor_one):
     if idx == len(coprimes):
-        ps_and_qs.append({curr_factor_one, curr_factor_two})
+        ps.append(curr_factor_one)
         return
     factor_one_new = curr_factor_one * pow(int(coprimes[idx][0]), int(coprimes[idx][1]))
-    get_ps_and_qs_helper(ps_and_qs, coprimes, idx + 1, factor_one_new, curr_factor_two)
-    factor_two_new = curr_factor_two * pow(int(coprimes[idx][0]), int(coprimes[idx][1]))
-    get_ps_and_qs_helper(ps_and_qs, coprimes, idx + 1, curr_factor_one, factor_two_new)
+    get_ps_and_qs_helper(ps, coprimes, idx + 1, factor_one_new)
+    get_ps_and_qs_helper(ps, coprimes, idx + 1, curr_factor_one)
 
 
 if __name__ == '__main__':
@@ -38,11 +40,10 @@ if __name__ == '__main__':
         coprime_factors = response['factors']
         ps_and_qs_pairs = get_ps_and_qs(coprime_factors)
         for pair in ps_and_qs_pairs:
-            factor_one = list(pair)[0]
-            factor_two = list(pair)[1]
-            if factor_one == 1 or factor_two == 1:
+            p, q = pair
+            if p == 1 or q == 1:
                 continue
-            phi = (factor_one - 1) * (factor_two - 1)
+            phi = (p - 1) * (q - 1)
             d = pow(e, -1, phi)
             m_num = pow(c, d, n)
             m_len = (m_num.bit_length() + 7) // 8

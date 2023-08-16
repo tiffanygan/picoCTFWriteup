@@ -14,7 +14,7 @@ From the [download](https://mercury.picoctf.net/static/3cfeb09681369c26e3f19d886
 3. d will be the inverse modulo of e with respect to phi.
 
 
-4. The numeric version of the message (m) is c<sup>d</sup> % n
+4. The numeric version of the message (m) is c<sup>d</sup> % n. In python, you can use the [overloaded `pow` function](https://www.programiz.com/python-programming/methods/built-in/pow), which takes in three parameters: the base, the exponent, and the mod. This makes the code more efficient and prevents numbers from becoming too large.
 
 
 5. Convert m to binary, and then into bytes to reveal the flag.
